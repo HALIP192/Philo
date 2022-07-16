@@ -6,7 +6,7 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 20:36:31 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/16 15:46:51 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/16 17:17:51 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,21 @@ uintmax_t	fork_action(int action, t_data *data, uint phil_num)
 {
 	uintmax_t	time;
 
-	if (action)
+	if (action == 1)
 	{
 		pthread_mutex_lock(data->mutex_s + phil_num);
 		if (data->phil_num == 1)
 		{
+			mutex_print(ft_time() - data->pthread_start[phil_num], phil_num,
+						"has taken L fork", data);
 			ft_usleep(data->live_time + 100);
 			return (0);
 		}
 		mutex_print(ft_time() - data->pthread_start[phil_num], phil_num,
-							"has taken L fork");
+							"has taken L fork", data);
 		pthread_mutex_lock(data->mutex_s + (phil_num + 1) % data->phil_num);
 		time = ft_time() - data->pthread_start[phil_num];
-		mutex_print(time, phil_num, "has taken R fork");
+		mutex_print(time, phil_num, "has taken R fork", data);
 		return (time);
 	}
 	else
@@ -43,32 +45,32 @@ uintmax_t	fork_action(int action, t_data *data, uint phil_num)
 		pthread_mutex_unlock(data->mutex_s + (phil_num + 1) % data->phil_num);
 		return (0);
 	}
-
 }
 
 void	*pthread_loop(size_t phil_num)
 {
-	t_data	*data;
+	t_data		*data;
+	uintmax_t	delay;
 
 	data = init_struct();
 	data->pthread_start[phil_num] = ft_time();
 	data->death_time[phil_num] = data->live_time;
-	while (data->eaten[phil_num] < data->eat_num && !somebody_dead(data))
+	while (((data->eaten[phil_num] < data->eat_num && data->all_args)
+			|| (!data->all_args))  && !somebody_dead(data))
 	{
-		data->death_time[phil_num] = fork_action(TAKE_FORK, data, phil_num) + data->live_time;
-		mutex_print(data->dt[phil_num] - data->live_time, phil_num,
-						"is eating");
+		delay = fork_action(TAKE_FORK, data, phil_num);
+		if (delay + data->eat_time <= data->death_time[phil_num])
+			data->death_time[phil_num] = delay + data->eat_time + data->live_time;
+		mutex_print(delay, phil_num,"is eating", data);
 		ft_usleep(data->eat_time);
 		fork_action(RELEASE_FORK, data, phil_num);
-		(data->eaten[phil_num])++;
-		if (somebody_dead(data))
-			return (NULL);
+		data->eaten[phil_num] += 1;
 		mutex_print(ft_time() - data->pthread_start[phil_num], phil_num,
-					"is sleeping");
-		if (somebody_dead(data))
-			return (NULL);
+					"is sleeping", data);
+		ft_usleep(data->sleep_time);
 		mutex_print(ft_time() - data->pthread_start[phil_num], phil_num,
-					"is thinking");
+					"is thinking",data);
+		//ft_usleep(data->sleep_time);
 	}
 	return (NULL);
 }
@@ -78,37 +80,45 @@ void	*death(t_data *data)
 	uint	cnt;
 	uint	eat_cnt;
 
-	cnt = 0;
 	eat_cnt = 0;
-	while (!somebody_dead(data) && eat_cnt < data->eat_num)
+	while (!somebody_dead(data) && (eat_cnt < data->phil_num || !data->all_args) )
 	{
-		cnt_eat += data->eaten[cnt] >= data->eat_num;
-		if (data->eaten[cnt] >= data->eat_num && ++cnt)
-			continue;
-		if (ft_time() - data->pthread_start[cnt] > data->dt[cnt])
+		cnt = 0;
+		eat_cnt = 0;
+		while (cnt < data->phil_num && !somebody_dead(data))
 		{
-			pthread_mutex_lock(&data->dead_mutex);
-			data->stop = 1;
-			pthread_mutex_unlock(&data->dead_mutex);
-			mutex_print(ft_time() - data->pthread_start[cnt], cnt, "died");
-			return (NULL);
+			eat_cnt += data->eaten[cnt] >= data->eat_num;
+			if (((data->eaten[cnt] >= data->eat_num && data->all_args)
+			|| (data->eaten[cnt] && !data->all_args))&& ++cnt )
+				continue;
+			if (ft_time() - data->pthread_start[cnt] > data->death_time[cnt]) {
+				pthread_mutex_lock(&data->dead_mutex);
+				data->stop = 1;
+				pthread_mutex_unlock(&data->dead_mutex);
+				mutex_print(ft_time() - data->pthread_start[cnt], cnt, "died", data);
+				return (NULL);
+			}
+			cnt++;
 		}
-		cnt++;
 	}
+	//write(1, "----------:", 11);
 	return (NULL);
 }
 
-void	mutex_print(uintmax_t time, uint phil_num, char *str)
+void	mutex_print(uintmax_t time, uint phil_num, char *str, t_data *data)
 {
 	static pthread_mutex_t	out_mutex = PTHREAD_MUTEX_INITIALIZER;
-	static char				pattern = "[0000.000]:000000000 ";
+	static char				pattern[] = "[00000.000]:000000000 ";
 
+	if (somebody_dead(data) && (str[0] != 'd'))
+		return ;
 	pthread_mutex_lock(&out_mutex);
 	ft_putunbr(pattern + 1, (uint)time);
 	ft_putunbr(pattern + 12, phil_num + 1);
 	(void)write(1, pattern, 22);
 	(void)write(1, str, ft_strlen(str));
-	(void)write(1, "/n", 1);
+	(void)write(1, "\n", 1);
+	//printf("%ju  %d %s\n", (uintmax_t)time,phil_num, str);
 	pthread_mutex_unlock(&out_mutex);
 }
 

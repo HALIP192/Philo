@@ -6,18 +6,18 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 13:26:48 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/16 14:41:55 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/16 17:18:27 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "inc/philo.h"
 
 uintmax_t	ft_time(void)
 {
 	static struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec);
+	return (time.tv_sec * 1000000 + time.tv_usec);
 }
 
 void	error_msg(char *str)
