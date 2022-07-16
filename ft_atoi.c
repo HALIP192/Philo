@@ -6,11 +6,11 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 14:56:43 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/10 15:05:31 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/16 15:26:54 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "inc/philo.h"
 
 int	ft_isspace(int c)
 {
@@ -25,8 +25,8 @@ int	ft_isdigit(int c)
 
 long long	ft_atol(const char *str)
 {
-	long long res;
-	long long sing;
+	long long result;
+	long long sign;
 
 	if (str == NULL)
 		return (0);
