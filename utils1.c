@@ -43,18 +43,19 @@ void	ft_putunbr(char *dest, uint n)
 
 void	ft_usleep(useconds_t usec)
 {
-	struct timeval	start;
+	/*struct timeval	start;
 	struct timeval	step;
 
 	gettimeofday(&start, NULL);
 	while (1)
 	{
-		usleep(50);
+		usleep(100);
 		gettimeofday(&step, NULL);
 		if ((size_t)(((size_t)(step.tv_sec - start.tv_sec)) * 1000000 +
 					 ((size_t)(step.tv_usec - start.tv_usec))) > usec)
 			break ;
-	}
+	}*/
+	usleep(usec);
 }
 
 void	end_philo(t_data *data)

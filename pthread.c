@@ -59,9 +59,9 @@ void	*pthread_loop(size_t phil_num)
 			|| (!data->all_args))  && !somebody_dead(data))
 	{
 		delay = fork_action(TAKE_FORK, data, phil_num);
-		if (delay + data->eat_time <= data->death_time[phil_num])
-			data->death_time[phil_num] = delay + data->eat_time + data->live_time;
-		mutex_print(delay, phil_num,"is eating", data);
+		data->death_time[phil_num] = delay + data->live_time;
+		mutex_print(ft_time() - data->pthread_start[phil_num], phil_num,
+					"is eating", data);
 		ft_usleep(data->eat_time);
 		fork_action(RELEASE_FORK, data, phil_num);
 		data->eaten[phil_num] += 1;
