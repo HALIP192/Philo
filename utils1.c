@@ -43,19 +43,19 @@ void	ft_putunbr(char *dest, uint n)
 
 void	ft_usleep(useconds_t usec)
 {
-	/*struct timeval	start;
+	struct timeval	start;
 	struct timeval	step;
 
 	gettimeofday(&start, NULL);
 	while (1)
 	{
-		usleep(100);
+		usleep(50);
 		gettimeofday(&step, NULL);
 		if ((size_t)(((size_t)(step.tv_sec - start.tv_sec)) * 1000000 +
 					 ((size_t)(step.tv_usec - start.tv_usec))) > usec)
 			break ;
-	}*/
-	usleep(usec);
+	}
+	//usleep(usec);
 }
 
 void	end_philo(t_data *data)
@@ -66,7 +66,8 @@ void	end_philo(t_data *data)
 	while (i < data->phil_num)
 	{
 		pthread_join(data->pthreads[i], NULL);
-		pthread_mutex_destroy(data->mutex_s + i++);
+		pthread_mutex_destroy(data->mutex_s + i);
+		pthread_mutex_destroy(data->mutex_eaten + i++);
 	}
 	//write(1, "----------------------------------------------------------------", 10);
 	pthread_join(data->pthreads[data->phil_num], NULL);

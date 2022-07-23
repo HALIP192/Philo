@@ -36,6 +36,7 @@ typedef struct s_data
 	pthread_t				*pthreads;
 	pthread_mutex_t			*mutex_s;
 	uintmax_t				*pthread_start;
+	pthread_mutex_t 		*mutex_eaten;
 	uint					*eaten;
 	uintmax_t				*death_time;
 
@@ -56,11 +57,13 @@ void		ft_putunbr(char *dest, uint src);
 uintmax_t	ft_time(void);
 void		*pthread_loop(size_t phil_num);
 void		*death(t_data *data);
-void		mutex_print(uintmax_t time, uint phil_num, char *str, t_data *data);
+int			mutex_print(uintmax_t time, uint phil_num, char *str, t_data *data);
 int			ft_atoi(const char *str);
 void		end_philo(t_data *data);
 void		ft_usleep(useconds_t usec);
 t_data		*init_struct(void);
 int			check_ready(t_data *data);
+void		eaten_action(t_data *data, size_t phil_num);
+int			big_mutex_init(t_data *data);
 
 #endif

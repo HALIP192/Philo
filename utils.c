@@ -41,6 +41,7 @@ int	malloc_data(t_data *data)
 	data->pthread_start = (uintmax_t *)malloc(sizeof(uintmax_t) * data->phil_num);
 	data->eaten = (uint *)malloc(sizeof(uint) * data->phil_num);
 	data->death_time = (uintmax_t *)malloc(sizeof(uintmax_t) * data->phil_num);
+	data->mutex_eaten = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * (data->phil_num));
 
 	if (data->pthreads && data->mutex_s && data->pthread_start
 		   	&& data->eaten && data->death_time)

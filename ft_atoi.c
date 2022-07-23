@@ -6,7 +6,7 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 14:56:43 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/16 15:26:54 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/23 21:29:35 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 int	ft_isspace(int c)
 {
 	return (c == '\f' || c == '\n' || c == '\r'
-			|| c == '\t' || c == '\v' || c == ' ');
+		|| c == '\t' || c == '\v' || c == ' ');
 }
 
 int	ft_isdigit(int c)
 {
-	return ( c <= '9' && c >= '0');
+	return (c <= '9' && c >= '0');
 }
 
 long long	ft_atol(const char *str)
 {
-	long long result;
-	long long sign;
+	long long	result;
+	long long	sign;
 
 	if (str == NULL)
 		return (0);
