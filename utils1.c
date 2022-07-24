@@ -6,15 +6,15 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/16 14:34:02 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/16 17:20:12 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/24 13:28:18 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "inc/philo.h"
 
-int somebody_dead(t_data *data)
+int	somebody_dead(t_data *data)
 {
-	int ret;
+	int	ret;
 
 	pthread_mutex_lock(&data->dead_mutex);
 	ret = data->stop;
@@ -52,10 +52,9 @@ void	ft_usleep(useconds_t usec)
 		usleep(50);
 		gettimeofday(&step, NULL);
 		if ((size_t)(((size_t)(step.tv_sec - start.tv_sec)) * 1000000 +
-					 ((size_t)(step.tv_usec - start.tv_usec))) > usec)
+			((size_t)(step.tv_usec - start.tv_usec))) > usec)
 			break ;
 	}
-	//usleep(usec);
 }
 
 void	end_philo(t_data *data)
@@ -69,13 +68,12 @@ void	end_philo(t_data *data)
 		pthread_mutex_destroy(data->mutex_s + i);
 		pthread_mutex_destroy(data->mutex_eaten + i++);
 	}
-	//write(1, "----------------------------------------------------------------", 10);
 	pthread_join(data->pthreads[data->phil_num], NULL);
 	pthread_mutex_destroy(&data->dead_mutex);
 	ft_free(data);
 }
 
-int check_ready(t_data *data)
+int	check_ready(t_data *data)
 {
 	int	ret;
 

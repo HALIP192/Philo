@@ -6,23 +6,21 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 13:15:52 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/16 17:19:40 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/24 14:41:15 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <pthread.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/time.h>
-
-# define uint unsigned int
-
+# include <stdio.h>
+# include <pthread.h>
+# include <stdint.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <sys/time.h>
+# include <sys/types.h>
 
 typedef struct s_data
 {
@@ -36,7 +34,7 @@ typedef struct s_data
 	pthread_t				*pthreads;
 	pthread_mutex_t			*mutex_s;
 	uintmax_t				*pthread_start;
-	pthread_mutex_t 		*mutex_eaten;
+	pthread_mutex_t			*mutex_eaten;
 	uint					*eaten;
 	uintmax_t				*death_time;
 
@@ -66,4 +64,4 @@ int			check_ready(t_data *data);
 void		eaten_action(t_data *data, size_t phil_num);
 int			big_mutex_init(t_data *data);
 
-#endif
+#endif //PHILO_H

@@ -6,7 +6,7 @@
 /*   By: ntitan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 20:09:57 by ntitan            #+#    #+#             */
-/*   Updated: 2022/07/23 20:10:13 by ntitan           ###   ########.fr       */
+/*   Updated: 2022/07/24 13:46:14 by ntitan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	eaten_action(t_data *data, size_t phil_num)
 	pthread_mutex_unlock(data->mutex_eaten + phil_num);
 }
 
-int big_mutex_init(t_data *data)
+int	big_mutex_init(t_data *data)
 {
 	int	mutex_error;
-	int i;
+	int	i;
 
 	i = 0;
 	mutex_error = 0;
